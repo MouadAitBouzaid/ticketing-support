@@ -17,8 +17,6 @@ public class Utilisateur {
     @Email
     private String email;
     private String motDePasse;
-    private enum role{
-        USER, AGENT, ADMIN
-    }
+    private String role;
     private boolean actif;
 }
