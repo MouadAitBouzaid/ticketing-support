@@ -19,4 +19,5 @@ public class Utilisateur {
     private String motDePasse;
     private String role;
     private boolean actif;
+    //test auth github
 }
