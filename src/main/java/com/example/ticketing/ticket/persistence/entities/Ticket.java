@@ -1,102 +1,51 @@
 package com.example.ticketing.ticket.persistence.entities;
 
+import com.example.ticketing.ticket.persistence.enums.TicketPriorite;
+import com.example.ticketing.ticket.persistence.enums.TicketStatut;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.UUID;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Entity
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ticket {
     @Id
-    private String id;
+    private Long id;
     private String titre;
     private String description;
-    private String statut;
-    private String priorite;
-    private LocalDateTime dateCreation;
-    private LocalDateTime dateDerniereMaj;
+    @Enumerated(EnumType.STRING)
+    private TicketStatut statut;
+    @Enumerated(EnumType.STRING)
+    private TicketPriorite priorite;
+    @JoinColumn
+    @Nullable
     @ManyToOne
     private Utilisateur createdBy;
+    @JoinColumn
+    @Nullable
     @ManyToOne
     private Utilisateur assignedTo;
-    private String commentaires;
-    private String historiques;
+    @OneToMany(mappedBy = "ticket")
+    private List<Commentaire> commentaires;
+    @OneToMany(mappedBy = "ticket")
+    private List<HistoriqueStatut> historiques;
 
-    public String getId() {
-        return id;
+    @PrePersist
+    public void onCreate(){
+       LocalDateTime now = LocalDateTime.now();
     }
-
-    public void setId(String id) {
-        this.id = id;
+    @PreUpdate
+    public void onUdpdate() {
+        LocalDateTime  now = LocalDateTime.now();
     }
-
-    public String getTitre() {
-        return titre;
-    }
-
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatut() {
-        return statut;
-    }
-
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
-
-    public String getPriorite() {
-        return priorite;
-    }
-
-    public void setPriorite(String priorite) {
-        this.priorite = priorite;
-    }
-
-    public LocalDateTime getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(LocalDateTime dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public LocalDateTime getDateDerniereMaj() {
-        return dateDerniereMaj;
-    }
-
-    public void setDateDerniereMaj(LocalDateTime dateDerniereMaj) {
-        this.dateDerniereMaj = dateDerniereMaj;
-    }
-
-    public Utilisateur getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Utilisateur createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Utilisateur getAssignedTo() {
-        return assignedTo;
-    }
-
-    public void setAssignedTo(Utilisateur assignedTo) {
-        this.assignedTo = assignedTo;
-    }
-
 }
