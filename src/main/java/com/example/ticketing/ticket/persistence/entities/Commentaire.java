@@ -17,8 +17,14 @@ public class Commentaire {
     private Long id;
     private String contenu;
     private LocalDateTime dateCreation;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auteur_id", nullable = false)
     private Utilisateur auteur;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
+    @PrePersist
+    public void onCreate() {
+        this.dateCreation = LocalDateTime.now();
+    }
 }

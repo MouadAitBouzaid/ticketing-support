@@ -2,13 +2,11 @@ package com.example.ticketing.ticket.persistence.entities;
 
 import com.example.ticketing.ticket.persistence.enums.TicketPriorite;
 import com.example.ticketing.ticket.persistence.enums.TicketStatut;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.UUID;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Ticket {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titre;
     private String description;
@@ -27,25 +26,25 @@ public class Ticket {
     private TicketStatut statut;
     @Enumerated(EnumType.STRING)
     private TicketPriorite priorite;
-    @JoinColumn
-    @Nullable
     @ManyToOne
+    @JoinColumn(name = "created_by_id", nullable = false)
     private Utilisateur createdBy;
-    @JoinColumn
-    @Nullable
     @ManyToOne
+    @JoinColumn(name = "assigned_to_id", nullable = true)
     private Utilisateur assignedTo;
-    @OneToMany(mappedBy = "ticket")
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Commentaire> commentaires;
     @OneToMany(mappedBy = "ticket")
     private List<HistoriqueStatut> historiques;
-
+    private LocalDateTime dateCreation;
+    private LocalDateTime dateDerniereMaj;
     @PrePersist
     public void onCreate(){
-       LocalDateTime now = LocalDateTime.now();
+        this.dateCreation = LocalDateTime.now();
+        this.dateDerniereMaj = LocalDateTime.now();
     }
     @PreUpdate
     public void onUdpdate() {
-        LocalDateTime  now = LocalDateTime.now();
+        this.dateDerniereMaj = LocalDateTime.now();
     }
 }

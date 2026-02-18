@@ -1,6 +1,7 @@
 package com.example.ticketing.ticket.persistence.entities;
 
 
+import com.example.ticketing.ticket.persistence.enums.TicketStatut;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,13 +16,15 @@ import java.util.Date;
 public class HistoriqueStatut {
     @Id
     private Long id;
-    private String ancienStatut;
-    private String nouveauStatut;
+    @Enumerated(EnumType.STRING)
+    private TicketStatut ancienStatut;
+    @Enumerated(EnumType.STRING)
+    private TicketStatut nouveauStatut;
     private LocalDateTime date;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "modifie_par_id")
     private Utilisateur modifiePar;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id")
     private Ticket ticket;
-
-
 }

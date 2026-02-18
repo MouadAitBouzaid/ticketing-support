@@ -1,8 +1,7 @@
 package com.example.ticketing.ticket.persistence.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import com.example.ticketing.ticket.persistence.enums.UserRole;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -13,10 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Utilisateur {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Email
+    @Column(unique = true, nullable = false)
     private String email;
     private String motDePasse;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
     private boolean actif;
 }
