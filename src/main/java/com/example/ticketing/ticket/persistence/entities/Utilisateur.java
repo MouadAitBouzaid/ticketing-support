@@ -4,12 +4,14 @@ import com.example.ticketing.ticket.persistence.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
